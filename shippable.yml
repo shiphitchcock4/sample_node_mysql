@@ -1,25 +1,31 @@
 language: node_js
 
 node_js:
-  - 0.10.25
+  - 0.12 
+  - 5.0
+  - 4.2.2
+  - 0.11
+  - 0.10
 
 services:
   - mysql
 
-# For xunit-file module to put results in shippable folder
-env:
-  - XUNIT_FILE=shippable/testresults/result.xml
+build:
+ pre_ci_boot:
+    image_name: drydock/u14nodpls
+    image_tag: tip
+    pull: true
+    options: '--privileged=true --net=bridge -e FOO=true -e BOO=false'
 
-# Make folders for the reports, and create the SQL db
-before_script:
-  - mkdir -p shippable/testresults
-  - mkdir -p shippable/codecoverage
-  - mysql -e 'create database if not exists test;'
+ ci:
+   - npm install
+   - mkdir -p shippable/testresults
+   - mkdir -p shippable/codecoverage
+   - export XUNIT_FILE=shippable/testresults/result.xml
+   - grunt
+   - ./node_modules/.bin/istanbul cover grunt -- -u tdd
+   - ./node_modules/.bin/istanbul report cobertura --dir  shippable/codecoverage/
+   - cat shippable/codecoverage/cobertura-coverage.xml
+   - mongo test --eval "db.dropDatabase()"
+  
 
-script:
-  - npm test
-
-# Generate coverage report with istanbul
-after_script:
-  - ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test.js -- -u tdd
-  - ./node_modules/.bin/istanbul report cobertura --dir  shippable/codecoverage/
