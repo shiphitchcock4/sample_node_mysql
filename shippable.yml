@@ -18,7 +18,7 @@ build:
     options: '--privileged=true --net=bridge -e FOO=true -e BOO=false'
 
  ci:
-   - npm install
+   - npm install  
    - ps -eax
    - ls -al
    # - source ~/.nvm/nvm.sh && nvm install $SHIPPABLE_NODE_VERSION
