@@ -19,13 +19,9 @@ build:
 
  ci:
    - npm install
-   - mkdir -p shippable/testresults
-   - mkdir -p shippable/codecoverage
-   - export XUNIT_FILE=shippable/testresults/result.xml
-   - grunt
-   - ./node_modules/.bin/istanbul cover grunt -- -u tdd
-   - ./node_modules/.bin/istanbul report cobertura --dir  shippable/codecoverage/
-   - cat shippable/codecoverage/cobertura-coverage.xml
-   - mongo test --eval "db.dropDatabase()"
-  
+   - ps -eax
+   - ls -al
+   # - source ~/.nvm/nvm.sh && nvm install $SHIPPABLE_NODE_VERSION
+   - npm install
+   - node --version
 
