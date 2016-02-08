@@ -17,7 +17,7 @@ build:
     pull: true
     options: '--privileged=true --net=bridge -e FOO=true -e BOO=false'
 
- ci:
+ ci:  
    - npm install  
    - ps -eax
    - ls -al
