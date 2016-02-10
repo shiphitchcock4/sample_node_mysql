@@ -18,10 +18,17 @@ build:
     options: '--privileged=true --net=bridge -e FOO=true -e BOO=false'
 
  ci:
-   - npm install
-   - ps -eax
-   - ls -al
-   # - source ~/.nvm/nvm.sh && nvm install $SHIPPABLE_NODE_VERSION
-   - npm install
-   - node --version
+    - echo "Hello, World!"
+    - env
+    - echo $PATH
+    - reports --help
+    - node --version
+    - mkdir -p shippable/testresults
+    - mkdir -p shippable/codecoverage
+    - npm install
+    - ./node_modules/.bin/istanbul cover grunt -- -u tdd
+    - ./node_modules/.bin/istanbul report cobertura --dir  shippable/codecoverage/
+    - cat shippable/codecoverage/cobertura-coverage.xml
+    - export XUNIT_FILE=shippable/testresults/result.xml
+    - grunt
 
